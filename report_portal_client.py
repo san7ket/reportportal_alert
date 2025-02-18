@@ -39,15 +39,10 @@ class ReportPortalClient:
             'filter.in.status': 'FAILED',
             'page.size': 100
         }
-        logging.info(f"Fetching tests with params: {params}")
-        
+        logging.info(f"Fetching tests with params: {params}")        
         response = requests.get(tests_endpoint, headers=headers, params=params, verify=self.verify_ssl)
-        response.raise_for_status()
-        
+        response.raise_for_status()       
         tests = response.json().get('content', [])
-        
-        # Apply filtering AFTER fetching, if test_name_filter is provided
         if test_name_filter:
-            tests = [test for test in tests if test_name_filter.lower() in test.get('name', '').lower()]
-        
+            tests = [test for test in tests if test_name_filter.lower() in test.get('name', '').lower()]        
         return tests
