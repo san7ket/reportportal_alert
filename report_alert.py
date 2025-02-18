@@ -12,8 +12,6 @@ def prepare_filters(args) -> Dict[str, str]:
     filters = {}
     if args.name:
         filters['filter.!cnt.name'] = args.name  # Updated to exclude launches by name
-    if args.test_name:
-        filters['filter.cnt.testName'] = args.test_name
     if args.status:
         filters['filter.eq.status'] = args.status
     if args.tags:
@@ -87,7 +85,8 @@ def main():
 
             for suite in suites:
                 suite_id = suite['id']
-                failed_tests = client.fetch_tests(args.project_name, launch_id, suite_id)
+                failed_tests = client.fetch_tests(args.project_name, launch_id, suite_id, test_name_filter=args.test_name)
+
                 if failed_tests:
                     launch_has_failures = True
                     total_failed_suites += 1

@@ -30,7 +30,7 @@ class ReportPortalClient:
         response.raise_for_status()
         return response.json().get('content', [])
 
-    def fetch_tests(self, project_name: str, launch_id: str, suite_id: str) -> List[Dict]:
+    def fetch_tests(self, project_name: str, launch_id: str, suite_id: str, test_name_filter: str = None) -> List[Dict]:
         tests_endpoint = f"{self.base_url}/api/v1/{project_name}/item"
         headers = {'Authorization': f'Bearer {self.token}', 'Content-Type': 'application/json'}
         params = {
@@ -40,6 +40,14 @@ class ReportPortalClient:
             'page.size': 100
         }
         logging.info(f"Fetching tests with params: {params}")
+        
         response = requests.get(tests_endpoint, headers=headers, params=params, verify=self.verify_ssl)
         response.raise_for_status()
-        return response.json().get('content', [])
+        
+        tests = response.json().get('content', [])
+        
+        # Apply filtering AFTER fetching, if test_name_filter is provided
+        if test_name_filter:
+            tests = [test for test in tests if test_name_filter.lower() in test.get('name', '').lower()]
+        
+        return tests
