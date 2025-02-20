@@ -1,13 +1,15 @@
 import shelve
 import logging
 
+
 def reset_cache():
     """Clear all cached data."""
     try:
-        with shelve.open("cache.db", flag='n'):
+        with shelve.open("cache.db", flag="n"):
             logging.info("Cache reset successfully.")
     except Exception as e:
         logging.error(f"Error resetting cache: {e}")
+
 
 def load_cache():
     """Load cached data from the shelve database."""
@@ -17,6 +19,7 @@ def load_cache():
     except Exception as e:
         logging.error(f"Error loading cache: {e}")
         return {}
+
 
 def save_cache(data):
     """Save data to the shelve database."""

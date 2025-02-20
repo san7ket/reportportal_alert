@@ -1,1 +1,5 @@
-.report-portal-config.json
+config.json
+cache.db
+*.csv
+__pycache__
+.ruff_cache
