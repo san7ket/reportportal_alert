@@ -26,7 +26,7 @@ This Python script interacts with the Report Portal API to fetch and analyze tes
 ## Configuration
 
 The script can be configured in two ways:
-1. Using a `.report-portal-config.json` file
+1. Using a `config.json` file
 2. Using environment variables
 
 ### Config File Structure
@@ -43,24 +43,39 @@ The script can be configured in two ways:
 
 ## Usage
 
-Basic usage:
+Basic filtering for project:
 ```bash
-python report_alert.py --project PROJECT_NAME
+python report_alert.py PROW
 ```
 
-With filters:
+Disable SSL verification:
 ```bash
-python report_alert.py --project PROJECT_NAME --attr "key1=value1" "key2=value2"
+python report_alert.py PROW --no-verify
+```
+
+With --attr filters:
+```bash
+python report_alert.py PROW --attr version_installed=4.12.0-0.nightly-2025-01-25-135326   
 ```
 
 View failed test cases:
 ```bash
-python report_alert.py --project PROJECT_NAME --failed-tests
+python report_alert.py PROW --status FAILED 
+```
+
+With --attr, --test-name(-tn) and --status(-s) filters:
+```bash
+python ./report_alert.py prow --attr version_installed=4.12.0-0.nightly-2025-01-25-135326 --test-name installer --status FAILED  
+```
+
+With filters --attr, --test-name(-tn), --status(-s) and excluding --name(-n) filters:
+```bash
+python ./report_alert.py prow --attr version_installed=4.12.0-0.nightly-2025-01-25-135326 --test-name nstaller --status FAILED -n automated-release  
 ```
 
 ### Command Line Arguments
 
-- `--project`: (Required) Project name in Report Portal
+- `PROJECT`: (Required) Project name in Report Portal, only the name of the project is passed, it has no preceeding flag
 - `--token`: Authentication token (overrides config file)
 - `-n, --name`: Filter launches by name (partial match)
 - `-s, --status`: Filter launches by status (PASSED, FAILED, STOPPED, INTERRUPTED, IN_PROGRESS)
